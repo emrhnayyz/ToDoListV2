@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToDo List</title>
+  <link href="/styles/main.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-4">
+  <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
+    <h1 class="text-2xl font-bold text-center mb-6">Görev Listesi</h1>
+
+    
+    <ul class="space-y-4">
+      <% tasks.forEach(task => { %>
+        <li class="flex items-center justify-between bg-gray-50 p-4 rounded-md shadow-md">
+          <div>
+            <h2 class="font-bold text-lg"><%= task.title %></h2>
+            <p class="text-sm text-gray-600"><%= task.description %></p>
+            <p class="text-sm text-gray-400">Kategori: <%= task.category %></p>
+            <p class="text-sm text-gray-400">Öncelik: <%= task.priority %></p>
+          </div>
+          <button class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+            Sil
+          </button>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+</body>
+</html>
