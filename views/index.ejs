@@ -4,25 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ToDo List</title>
-  <link href="/styles/main.css" rel="stylesheet">
+ 
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 p-4">
+<body class="bg-gray-100 p-6">
   <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
+   
     <h1 class="text-2xl font-bold text-center mb-6">Görev Listesi</h1>
 
-    
+
+    <form action="/add" method="POST" class="mb-6">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <input
+          type="text"
+          name="title"
+          placeholder="Görev Başlığı"
+          class="w-full p-2 border border-gray-300 rounded-md"
+          required>
+        <input
+          type="text"
+          name="category"
+          placeholder="Kategori"
+          class="w-full p-2 border border-gray-300 rounded-md">
+        <textarea
+          name="description"
+          placeholder="Açıklama"
+          class="w-full p-2 border border-gray-300 rounded-md"></textarea>
+        <select
+          name="priority"
+          class="w-full p-2 border border-gray-300 rounded-md">
+          <option value="low">Düşük</option>
+          <option value="normal" selected>Normal</option>
+          <option value="medium">Orta</option>
+          <option value="high">Yüksek</option>
+        </select>
+      </div>
+      <button
+        type="submit"
+        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+        Görev Ekle
+      </button>
+    </form>
+
+   
     <ul class="space-y-4">
       <% tasks.forEach(task => { %>
-        <li class="flex items-center justify-between bg-gray-50 p-4 rounded-md shadow-md">
+        <li class="bg-gray-50 p-4 rounded-md shadow-md border-l-4"
+            style="border-color: <%= task.priority === 'high' ? '#f87171' : task.priority === 'medium' ? '#fb923c' : '#4ade80' %>;">
           <div>
             <h2 class="font-bold text-lg"><%= task.title %></h2>
             <p class="text-sm text-gray-600"><%= task.description %></p>
             <p class="text-sm text-gray-400">Kategori: <%= task.category %></p>
             <p class="text-sm text-gray-400">Öncelik: <%= task.priority %></p>
           </div>
-          <button class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
-            Sil
-          </button>
+          <form action="/delete/<%= task.task_id %>" method="POST" class="mt-2">
+            <button
+              class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+              Sil
+            </button>
+          </form>
         </li>
       <% }) %>
     </ul>
