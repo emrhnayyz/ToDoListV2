@@ -31,7 +31,7 @@
             <input type="text" name="category" value="<%= task.category %>" class="w-full p-2 border rounded-md">
             <select name="priority" class="w-full p-2 border rounded-md">
               <option value="low" <%= task.priority === 'low' ? 'selected' : '' %>>Low</option>
-              <option value="normal" <%= task.priority === 'normal' ? 'selected' : '' %>>Normal</option>
+              
               <option value="medium" <%= task.priority === 'medium' ? 'selected' : '' %>>Medium</option>
               <option value="high" <%= task.priority === 'high' ? 'selected' : '' %>>High</option>
             </select>
