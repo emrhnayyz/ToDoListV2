@@ -1,51 +1,72 @@
-
 <ul class="space-y-4">
-    <% tasks.forEach(task => { %>
-      <li id="task-<%= task.task_id %>" class="bg-gray-50 p-4 rounded-md shadow-md border-l-4"
-          style="border-color: <%= task.priority === 'high' ? '#f87171' : task.priority === 'medium' ? '#fb923c' : '#4ade80' %>;">
-        
-        <!-- Task View (Default Display) -->
-        <div class="task-view">
-          <h2 class="font-bold text-lg"><%= task.title %></h2>
-          <p class="text-sm text-gray-600"><%= task.description %></p>
+  <% tasks.forEach(task => { %>
+    <li id="task-<%= task.task_id %>" class="bg-gray-50 p-4 rounded-md shadow-md border-l-4
+      <%= task.completed ? 'opacity-50' : '' %>"
+      style="border-color: <%= task.priority === 'high' ? '#f87171' : task.priority === 'medium' ? '#fb923c' : '#4ade80' %>;">
+      
+      <!-- Task View -->
+      <div class="task-view flex justify-between items-center">
+        <!-- Task Details -->
+        <div>
+          <h2 class="font-bold text-lg <%= task.completed ? 'line-through' : '' %>"><%= task.title %></h2>
+          <p class="text-sm text-gray-600 <%= task.completed ? 'line-through' : '' %>"><%= task.description %></p>
           <p class="text-sm text-gray-400">Category: <%= task.category %></p>
           <p class="text-sm text-gray-400">Priority: <%= task.priority %></p>
-          <div class="flex gap-2 mt-2">
-            <form action="/delete/<%= task.task_id %>" method="POST">
-              <button class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
-                Delete
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-2">
+          <!-- Complete/Undo Task -->
+          <form action="/toggle-complete/<%= task.task_id %>" method="POST">
+            <% if (!task.completed) { %>
+              <button type="submit" class="text-green-500 text-2xl">
+                ✅
               </button>
-            </form>
-            <button type="button" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
-              onclick="enterEditMode('<%= task.task_id %>')">
-              Edit
+            <% } else { %>
+              <button type="submit" class="text-gray-500 text-2xl">
+                🔄
+              </button>
+            <% } %>
+          </form>
+
+          <!-- Delete Button -->
+          <form action="/delete/<%= task.task_id %>" method="POST">
+            <button class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+              Delete
+            </button>
+          </form>
+
+          <!-- Edit Button -->
+          <button type="button" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
+            onclick="enterEditMode('<%= task.task_id %>')">
+            Edit
+          </button>
+        </div>
+      </div>
+      
+      <!-- Task Edit Form -->
+      <div class="task-edit hidden">
+        <form action="/update/<%= task.task_id %>" method="POST" class="space-y-2">
+          <input type="text" name="title" value="<%= task.title %>" class="w-full p-2 border rounded-md">
+          <textarea name="description" class="w-full p-2 border rounded-md"><%= task.description %></textarea>
+          <input type="text" name="category" value="<%= task.category %>" class="w-full p-2 border rounded-md">
+          <select name="priority" class="w-full p-2 border rounded-md">
+            <option value="low" <%= task.priority === 'low' ? 'selected' : '' %>>Low</option>
+            <option value="normal" <%= task.priority === 'normal' ? 'selected' : '' %>>Normal</option>
+            <option value="medium" <%= task.priority === 'medium' ? 'selected' : '' %>>Medium</option>
+            <option value="high" <%= task.priority === 'high' ? 'selected' : '' %>>High</option>
+          </select>
+          <div class="flex gap-2 mt-2">
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+              Save
+            </button>
+            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+              onclick="exitEditMode('<%= task.task_id %>')">
+              Cancel
             </button>
           </div>
-        </div>
-  
-        <!-- Task Edit Form (Hidden by Default) -->
-        <div class="task-edit hidden">
-          <form action="/update/<%= task.task_id %>" method="POST" class="space-y-2">
-            <input type="text" name="title" value="<%= task.title %>" class="w-full p-2 border rounded-md">
-            <textarea name="description" class="w-full p-2 border rounded-md"><%= task.description %></textarea>
-            <input type="text" name="category" value="<%= task.category %>" class="w-full p-2 border rounded-md">
-            <select name="priority" class="w-full p-2 border rounded-md">
-              <option value="low" <%= task.priority === 'low' ? 'selected' : '' %>>Low</option>
-              
-              <option value="medium" <%= task.priority === 'medium' ? 'selected' : '' %>>Medium</option>
-              <option value="high" <%= task.priority === 'high' ? 'selected' : '' %>>High</option>
-            </select>
-            <div class="flex gap-2 mt-2">
-              <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
-                Save
-              </button>
-              <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
-                onclick="exitEditMode('<%= task.task_id %>')">
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </li>
-    <% }) %>
-  </ul>
+        </form>
+      </div>
+    </li>
+  <% }) %>
+</ul>

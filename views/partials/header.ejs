@@ -1,0 +1,30 @@
+
+<header class="bg-blue-500 text-white p-4 mb-8">
+    <div class="flex justify-between items-center">
+      <!-- Proje Başlığı -->
+      <h1 class="text-xl font-bold">ToDo List</h1>
+      
+      <!-- Arama Kutusu (Bunu bir sonraki adımda ekleyeceğiz) -->
+    </div>
+    
+    <!-- Filtreleme Alanı -->
+    <div class="mt-4">
+        <form action="/filter/category" method="GET" class="flex gap-2 text-black">
+            <select name="category" class="p-2 border rounded-md">
+              <!-- Tüm kategoriler için seçenek -->
+              <option value="all" <%= selectedCategory === "all" ? "selected" : "" %>>All Categories</option>
+              
+              <!-- Veritabanından gelen kategoriler -->
+              <% categories.forEach(category => { %>
+                <option value="<%= category.category %>" <%= selectedCategory === category.category ? "selected" : "" %>>
+                  <%= category.category.charAt(0).toUpperCase() + category.category.slice(1).toLowerCase() %>
+                </option>
+              <% }) %>
+            </select>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+              Filter
+            </button>
+          </form>
+          
+    </div>
+  </header>

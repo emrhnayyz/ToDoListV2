@@ -10,40 +10,45 @@
 </head>
 
 <body class="bg-gray-100 p-6">
-  <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
 
-    <!-- Title -->
-    <h1 class="text-2xl font-bold text-center mb-6">Task List</h1>
+  <!-- Header -->
 
-    <!-- Include Add Task Form -->
-    <%- include('partials/addForm.ejs'); -%>
+  <%- include('./partials/header') %>
+
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 pt-6 mt-4">
+
+      <!-- Title -->
+      <h1 class="text-2xl font-bold text-center mb-6">Task List</h1>
+
+      <!-- Include Add Task Form -->
+      <%- include('partials/addForm.ejs'); -%>
 
 
-      <!-- Include Task List -->
-      <%- include('partials/taskList.ejs') -%>
+        <!-- Include Task List -->
+        <%- include('partials/taskList.ejs') -%>
 
-  </div>
+    </div>
 
-  <!-- JavaScript -->
-  <script>
-    function enterEditMode(taskId) {
-      const taskElement = document.getElementById(`task-${taskId}`);
-      const taskView = taskElement.querySelector(".task-view");
-      const taskEdit = taskElement.querySelector(".task-edit");
+    <!-- JavaScript -->
+    <script>
+      function enterEditMode(taskId) {
+        const taskElement = document.getElementById(`task-${taskId}`);
+        const taskView = taskElement.querySelector(".task-view");
+        const taskEdit = taskElement.querySelector(".task-edit");
 
-      taskView.classList.add("hidden");
-      taskEdit.classList.remove("hidden");
-    }
+        taskView.classList.add("hidden");
+        taskEdit.classList.remove("hidden");
+      }
 
-    function exitEditMode(taskId) {
-      const taskElement = document.getElementById(`task-${taskId}`);
-      const taskView = taskElement.querySelector(".task-view");
-      const taskEdit = taskElement.querySelector(".task-edit");
+      function exitEditMode(taskId) {
+        const taskElement = document.getElementById(`task-${taskId}`);
+        const taskView = taskElement.querySelector(".task-view");
+        const taskEdit = taskElement.querySelector(".task-edit");
 
-      taskView.classList.remove("hidden");
-      taskEdit.classList.add("hidden");
-    }
-  </script>
+        taskView.classList.remove("hidden");
+        taskEdit.classList.add("hidden");
+      }
+    </script>
 </body>
 
 </html>

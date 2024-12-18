@@ -22,14 +22,16 @@ app.use(express.static("public"));
 // Home Route - Display Tasks
 app.get("/", async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM tasks ORDER BY task_id ASC");
+    const tasksResult = await db.query("SELECT * FROM tasks ORDER BY task_id ASC");
     const categoriesResult = await db.query("SELECT DISTINCT category FROM tasks WHERE category IS NOT NULL");
-    res.render("index.ejs", { 
-        tasks: result.rows,
-        categories: categoriesResult.rows,
+
+    res.render("index.ejs", {
+      tasks: tasksResult.rows,
+      categories: categoriesResult.rows,
+      selectedCategory: "all", // Varsayılan kategori
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching tasks or categories:", error);
     res.status(500).send("Server Error");
   }
 });
@@ -75,6 +77,49 @@ app.post("/update/:id", async (req, res) => {
   } catch (error) {
     console.log("Error updating task:", error);
     res.status(500).send("Server Error: Task could not be updated.");
+  }
+});
+// Task completed or not ?
+app.post("/toggle-complete/:id", async (req, res) => {
+  const taskId = req.params.id;
+
+  try {
+    // Görevin mevcut durumunu alın
+    const result = await db.query("SELECT completed FROM tasks WHERE task_id = $1", [taskId]);
+    const currentStatus = result.rows[0].completed;
+
+    // Durumu tersine çevir
+    const newStatus = !currentStatus;
+    await db.query("UPDATE tasks SET completed = $1 WHERE task_id = $2", [newStatus, taskId]);
+
+    res.redirect("/");
+  } catch (error) {
+    console.error("Error toggling task completion:", error);
+    res.status(500).send("Server Error");
+  }
+});
+
+app.get("/filter/category", async (req, res) => {
+  const selectedCategory = req.query.category;
+
+  try {
+    let tasksResult;
+    if (selectedCategory === "all") {
+      tasksResult = await db.query("SELECT * FROM tasks ORDER BY task_id ASC");
+    } else {
+      tasksResult = await db.query("SELECT * FROM tasks WHERE category = $1 ORDER BY task_id ASC", [selectedCategory]);
+    }
+
+    const categoriesResult = await db.query("SELECT DISTINCT category FROM tasks WHERE category IS NOT NULL");
+
+    res.render("index.ejs", {
+      tasks: tasksResult.rows,
+      categories: categoriesResult.rows,
+      selectedCategory, // Seçilen kategori
+    });
+  } catch (error) {
+    console.error("Error filtering tasks by category:", error);
+    res.status(500).send("Server Error");
   }
 });
 
